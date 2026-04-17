@@ -22,3 +22,4 @@ if ($_.ErrorDetails) {
 }
 
 "Тест завершён: $(Get-Date)" | Out-File "$env:TEMP\stealer_test.txt" -Encoding utf8 -Append
+# force update
